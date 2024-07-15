@@ -1,0 +1,119 @@
+
+
+#define buzzer 13 //Buzzer ve ledlerin bağlı olduğu pinleri tanımlıyoruz.
+#define led1 9
+#define led2 8
+#define led3 10
+//led1 kirmizi led2 sarı led3 yeşil
+#include <LiquidCrystal.h> //LCD kütüphanemizi başlatıyoruz.
+int trigPin = A0; //Ultrasonik sensör trig pini değişkeni
+int echoPin = A1; //Ultrasonik sensör echo pini değişkeni
+int sure; //Ses dalgasının gidip gelme süresi değişkeni
+int uzaklik; //Ölçülen uzaklık değeri değişkeni
+int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2; //LCD'nin pin değişkenlerini tanımlıyoruz.
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7); //LCD'nin pin bağlantılarını ayarlıyoruz.
+void setup() {
+ pinMode(trigPin, OUTPUT); //trig pinini OUTPUT olarak ayarlıyoruz.
+ pinMode(echoPin,INPUT); //echo pinini INPUT olarak ayarlıyoruz.
+ pinMode(buzzer,OUTPUT); //buzzer OUTPUT olarak ayarlıyoruz.
+ pinMode(led3,OUTPUT); //ledleri OUTPUT olarak ayarlıyoruz.
+ pinMode(led2,OUTPUT);
+ pinMode(led1,OUTPUT);
+ lcd.begin(16, 2); //LCD ekranımızın en-boy oranını ayarlıyoruz. 
+}
+void loop() {
+ digitalWrite(trigPin, LOW); //Ultrasonik sensör ile ölçüm sekansını başlatıyoruz.
+ delayMicroseconds(5);
+ digitalWrite(trigPin, HIGH);
+ delayMicroseconds(10);
+ digitalWrite(trigPin, LOW);
+ sure = pulseIn(echoPin, HIGH, 11600); //Ses dalgasının gidip gelme süresini ölçüyoruz.
+ uzaklik= sure*0.0345/2; //Ölçülen süre ile uzaklık hesabı yapıyoruz.
+ lcd.clear(); //LCD'deki eski yazılar temizlenir.
+ lcd.setCursor(5, 0); //LCD'nin 1. satır 1. sütunundan yazmaya başlıyoruz. 
+ lcd.print("MESAFE"); 
+ lcd.setCursor(6, 1); //LCD'nin 2. satır 1. sütunundan yazmaya başlıyoruz.
+ lcd.print(uzaklik); //Uzaklık değerini LCD'ye yazdırıyoruz.
+ lcd.print("cm");
+ 
+ if ( uzaklik > 100 ) { //uzaklık 100 cm’nin üzerinde ise buzzer ve ledleri kapat.
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led1,LOW);
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW); 
+ 
+ } 
+ 
+ if ( uzaklik > 50 && uzaklik < 100) { //uzaklık 50-100 cm aralığındaysa tüm ledleri söndür ve 
+ digitalWrite(led1,LOW); //Led3(Yeşil) ve Buzzer’ı çalıştır.
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led3,HIGH);
+ delay(50);
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led3,LOW);
+ delay(100);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led3,HIGH);
+}
+ if ( uzaklik > 25 && uzaklik < 50) { //uzaklık 25-50 cm aralığındaysa tüm ledleri söndür ve
+ digitalWrite(led1,LOW); //Led2(Sarı) ve Buzzer’ı çalıştır.
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led2,HIGH);
+ delay(50);
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led2,LOW);
+ delay(50);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led2,HIGH);
+}
+ if ( uzaklik > 10 && uzaklik < 25) { //uzaklık 10-25 cm aralığındaysa tüm ledleri söndür ve
+ digitalWrite(led1,LOW); //Led1(Kırmızı) ve Buzzer’ı çalıştır.
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led1,HIGH);
+ delay(10);
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led1,LOW);
+ delay(10);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led1,HIGH);
+ 
+}
+ if ( uzaklik < 10) { //uzaklık 10 cm altındaysa Led1(Kırmızı) ve Buzzer’ı sürekli çalıştır.
+ digitalWrite(buzzer,HIGH); //Led2(Sarı) ve Led3(Yeşil) yanıp yanıp söndür.
+ digitalWrite(led1,HIGH);
+ digitalWrite(led2,HIGH);
+ digitalWrite(led3,HIGH);
+ delay(50);
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW);
+    digitalWrite(buzzer,HIGH);
+ digitalWrite(led2,HIGH);
+ delay(50);
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led2,LOW);
+ delay(50);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led2,HIGH);
+}
+ if ( uzaklik > 10 && uzaklik < 25) { //uzaklık 10-25 cm aralığındaysa tüm ledleri söndür ve
+ digitalWrite(led1,LOW); //Led1(Kırmızı) ve Buzzer’ı çalıştır.
+ digitalWrite(led2,LOW);
+ digitalWrite(led3,LOW);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led1,HIGH);
+ delay(10);
+ digitalWrite(buzzer,LOW);
+ digitalWrite(led1,LOW);
+ delay(10);
+ digitalWrite(buzzer,HIGH);
+ digitalWrite(led1,HIGH);
+ 
+}
+
+  }  
